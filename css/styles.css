@@ -1,3 +1,21 @@
+@media (max-width: 800px) {
+	.info-block {
+		width: 50%;
+	}
+	p {
+		display: block;
+	}
+}
+
+@media (max-width: 500px) {
+	.info-block {
+		width: 100%;
+	}
+	p {
+		display: block;
+	}
+}
+
 body {
 	font-family: Consolas, monaco, monospace;
 	background-color: #0d1117;
@@ -6,10 +24,19 @@ body {
 
 #navbar {
 	font-family: Consolas, monaco, monospace;
-	background-color: transparent;
+	background-color: #0d1117;
 	color: #f0f6fc;
 	padding: 10px;
 	display: block;
+}
+
+.nav-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+nav {
+	background-color: #0d1117;
 }
 
 nav ul {
@@ -18,13 +45,19 @@ nav ul {
 	padding: 0;
 	display: flex;
 	justify-content: center;
-	margin-top: 0px;
 	font-size: 20px;
+}
+
+#navbar a:link,
+#navbar a:visited,
+#navbar a:active {
+	color: #f0f6fc;
+	text-decoration: none;
 }
 
 .navButton {
 	font-family: Consolas, monaco, monospace;
-	background-color: transparent;
+	background-color: #12161d;
 	border: none;
 	color: #f0f6fc;
 	font-size: 15px;
@@ -47,13 +80,15 @@ nav ul {
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 50px;
+	display: flex;
+	justify-content: center;
 }
 
 .info-block {
 	background-color: #161b22;
 	padding: 20px;
 	margin: 20px 20px;
-	width: 300px;
+	width: 400px;
 	min-width: 300px;
 	min-height: 200px;
 	border-radius: 10px;
@@ -64,20 +99,15 @@ nav ul {
 	margin: 0;
 }
 
-@media (max-width: 800px) {
-	.info-block {
-		width: 50%;
-	}
-}
-
-@media (max-width: 500px) {
-	.info-block {
-		width: 100%;
-	}
-}
-
 footer {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
+}
+
+footer p a:link,
+footer p a:visited,
+footer p a:active {
+	color: #f0f6fc;
+	text-decoration: none;
 }
