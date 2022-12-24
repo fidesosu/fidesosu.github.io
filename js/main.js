@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const navbar = document.getElementById('navbar');
 
   toggleNavbarButton.addEventListener('click', function() {
-    if (navbar.style.display === 'none') {
-      navbar.style.display = 'block';
-    } else {
+    if (navbar.style.display === 'block') {
       navbar.style.display = 'none';
+    } else {
+      navbar.style.display = 'block';
     }
   });
 });
