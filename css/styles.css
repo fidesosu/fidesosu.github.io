@@ -111,3 +111,8 @@ footer p a:active {
 	color: #f0f6fc;
 	text-decoration: none;
 }
+
+div h2 a {
+	color: #b3bac2;
+	text-decoration: none;
+}
