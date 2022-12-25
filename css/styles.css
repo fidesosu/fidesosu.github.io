@@ -22,6 +22,10 @@ body {
 	color: #b3bac2;
 }
 
+#navbar.show {
+	display: block;
+}
+
 #navbar {
 	font-family: Consolas, monaco, monospace;
 	background-color: #0d1117;
