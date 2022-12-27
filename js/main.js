@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('toggle-navbar-button').addEventListener('click', function() {
     document.getElementById('navbar').classList.toggle('show');
   });

@@ -20,6 +20,11 @@ body {
 	font-family: Consolas, monaco, monospace;
 	background-color: #0d1117;
 	color: #b3bac2;
+	overflow: hidden;
+}
+
+::-webkit-scrollbar {
+	display: none;
 }
 
 #navbar.show {
@@ -36,7 +41,6 @@ body {
 
 .nav-container {
 	display: flex;
-	justify-content: space-between;
 }
 
 nav {
