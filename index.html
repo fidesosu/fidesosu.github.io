@@ -1,71 +1,130 @@
-<!DOCTYPE html>
 <html>
 	<head>
-		<!--Favicon-->
-		<link rel="icon" type="image/x-icon" href="images/favicon.jpg" />
-
-		<!--Styles-->
+		<title>Projects</title>
 		<link rel="stylesheet" href="css/styles.css" />
-
-		<!--Scripts-->
-		<script src="js/main.js"></script>
-
-		<!--Meta-->
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>Kitaura</title>
+    <link rel="icon" href="img/favicon.png">
 	</head>
 	<body>
-		<button class="menuButton" id="menu-button">Menu</button>
-		<div id="menu" class="menu">
-			<div id="menu-items">
-				<a href="https://discord.gg/gMpS6Frfep"><li>Discord Server</li></a>
-				<a href="https://open.spotify.com/user/21eopzilbov2hl65c7ybwd5za"><li>Spotify</li></a>
-				<a href="https://twitter.com/fidesosu"><li>Twitter</li></a>
-				<a style="float: right">println!("Hello World!")</a>
+    <a href="https://github.com/fidesosu/RustShell">
+      <div id="cards">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="img/cli.webp" style="width: 300px" />
+            </div>
+            <div class="card-info-wrapper">
+              <div class="card-info">
+                <div class="card-info-title">
+                  <h3>RustShell</h3>
+                  <h4>
+                    RustShell is a command line program that
+                    allows you to perform various tasks using
+                    commands on your computer.
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+			<div class="card">
+				<div class="card-content">
+					<div class="card-image">
+            <img src="img/updates.webp" style="width: 300px" />
+          </div>
+					<div class="card-info-wrapper">
+						<div class="card-info">
+							<div class="card-info-title">
+								<h3>Studentica</h3>
+								<h4>
+									Studentica is a small project that I am
+									making. It's a website that allows students
+									to see their grades and other information.
+									It's still in early development.
+								</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+      <a href="https://github.com/fidesosu/CodeHighlighter">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-image">
+              <img src="img/labels.webp" style="width: 300px" />
+            </div>
+            <div class="card-info-wrapper">
+              <div class="card-info">
+                <div class="card-info-title">
+                  <h3>Code Highlighter</h3>
+                  <h4>
+                    Code Highlighter is an extension that automatically highlights code in page. 
+                    It's still in early development.
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+			<div class="card">
+				<div class="card-content">
+					<div class="card-image"></div>
+					<div class="card-info-wrapper">
+						<div class="card-info">
+							<div class="card-info-title">
+								<h3>Adios</h3>
+								<h4>See you...</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-content">
+					<div class="card-image"></div>
+					<div class="card-info-wrapper">
+						<div class="card-info">
+							<div class="card-info-title">
+								<h3>I mean hello</h3>
+								<h4>...over here.</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-content">
+					<div class="card-image"></div>
+					<div class="card-info-wrapper">
+						<div class="card-info">
+							<div class="card-info-title">
+								<h3>Otters</h3>
+								<h4>Look at me, imma cute lil fella.</h4>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="getblurred">
-			<center>
-				<header>
-					<h1>Repositories</h1>
-				</header>
-			</center>
-			<div class="info-blocks">
-				<div class="info-block">
-					<h2>
-						<a href="https://github.com/fidesosu/RustShell"
-							>RustShell</a
-						>
-					</h2>
-					<p>
-						RustShell is a command line program that allows you to
-						perform various tasks using commands on your computer.
-					</p>
-				</div>
-				<div class="info-block">
-					<h2><a>???</a></h2>
-					<p>Future project, I don't know what it will be yet.</p>
-				</div>
-				<!-- more info blocks go here -->
-			</div>
-		</div>
-		<div>
-			<center>
-				<footer>
-					<p>
-						Discord:
-						<a href="https://discord.com/users/601941478041976832"
-							>fides#3818</a
-						>
-					</p>
-					<p>
-						Work Email:
-						<a href="mailto: fidesosu@gmail.com"
-							>fidesosu@gmail.com</a
-						>
-					</p>
-				</footer>
-			</center>
-		</div>
+		<footer>
+			<a
+				id="source-link"
+				class="link"
+				href="https://discord.com/users/601941478041976832"
+				target="_blank"
+			>
+				<span class="roboto-mono">Discord</span>
+			</a>
+			<a
+				id="youtube-link"
+				class="link"
+				href="https://twitter.com/fidesosu"
+				target="_blank"
+			>
+				<span>Twitter</span>
+			</a>
+		</footer>
+		<script src="js/cardHighlight.js"></script>
 	</body>
 </html>
