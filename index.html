@@ -1,127 +1,512 @@
-<html>
-	<head>
-		<title>Projects</title>
-		<link rel="stylesheet" href="css/styles.css" />
-    <link rel="icon" href="img/favicon.png">
-	</head>
-	<body ondragstart="return false;" ondrop="return false;">
-    <div id="cards">
-      <a 
-        href="https://github.com/fidesosu/RustShell"
-  			target="_blank"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="card-image">
-              <img src="img/cli.webp" style="width: 300px" />
-            </div>
-            <div class="card-info-wrapper">
-              <div class="card-info">
-                <div class="card-info-title">
-                  <h3>RustShell</h3>
-                  <h4>
-                    RustShell is a command line program that
-                    allows you to perform various tasks using
-                    commands on your computer.
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My GitHub.io Page</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inter Font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1e1e1e; /* Dark VS Code background */
+            color: #cccccc; /* Light grey text */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent body scroll, content will scroll if needed */
+        }
+        .vscode-sidebar {
+            background-color: #252526; /* VS Code sidebar background */
+            color: #858585; /* VS Code icon/text color */
+            width: 70px; /* Activity Bar width */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #333333; /* Separator */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            position: fixed; /* Keep sidebar fixed */
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .activity-bar {
+            background-color: #333333; /* Darker background for activity bar */
+            width: 50px;
+            height: 100vh;
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        .activity-item {
+            padding: 15px 0;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s, color 0.2s;
+            position: relative;
+        }
+        .activity-item:hover, .activity-item.active {
+            background-color: #3e3e3e; /* Hover/active background */
+            color: #ffffff; /* Active icon color */
+        }
+        .activity-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #007acc; /* VS Code blue accent */
+        }
+
+        .explorer-sidebar {
+            background-color: #252526; /* VS Code sidebar background */
+            width: 250px; /* Explorer width */
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 50px; /* Offset by activity bar width */
+            transform: translateX(-100%); /* Start hidden */
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            border-right: 1px solid #333333;
+            z-index: 9; /* Below activity bar */
+            padding-top: 50px; /* Space for the top bar of explorer */
+            overflow-y: auto; /* Allow content to scroll */
+        }
+        .explorer-sidebar.open {
+            transform: translateX(0); /* Slide open */
+        }
+
+        .main-content {
+            margin-left: 50px; /* Initial margin for activity bar */
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto; /* Allow content to scroll */
+            height: 100vh; /* Fill remaining height */
+            transition: margin-left 0.3s ease-in-out;
+            background-color: #1e1e1e; /* Main editor background */
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content.sidebar-open {
+            margin-left: 300px; /* 50px (activity) + 250px (explorer) */
+        }
+
+        .section-header {
+            background-color: #333333;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cccccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #3c3c3c;
+        }
+        .section-header svg {
+            transition: transform 0.2s;
+        }
+        .section-header.collapsed svg {
+            transform: rotate(-90deg);
+        }
+        .section-content {
+            padding: 5px 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .section-content.collapsed {
+            max-height: 0 !important;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .explorer-item {
+            padding: 5px 15px 5px 25px; /* Indent for folder/file */
+            font-size: 0.9rem;
+            color: #cccccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .explorer-item:hover {
+            background-color: #37373d;
+        }
+        .explorer-item svg {
+            margin-right: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .explorer-sidebar {
+                width: 200px; /* Smaller sidebar on mobile */
+                left: 50px; /* Still offset by activity bar */
+            }
+            .main-content.sidebar-open {
+                margin-left: 250px; /* 50px + 200px */
+            }
+        }
+        @media (max-width: 600px) {
+            .explorer-sidebar {
+                left: 0; /* Explorer covers activity bar */
+                width: 100vw; /* Full width */
+                transform: translateX(-100%); /* Start hidden */
+                z-index: 20; /* On top of everything */
+            }
+            .activity-bar {
+                z-index: 21; /* Activity bar always visible on top */
+            }
+            .main-content {
+                margin-left: 0; /* No margin when explorer is hidden */
+            }
+            .main-content.sidebar-open {
+                margin-left: 0; /* No margin, explorer covers content */
+            }
+            .activity-item {
+                font-size: 1.5rem; /* Make icons larger for touch */
+            }
+        }
+
+        /* Basic scrollbar styling for consistency */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body class="flex">
+    <!-- Activity Bar (Leftmost VS Code bar) -->
+    <div class="activity-bar">
+        <div class="activity-item active" id="explorer-icon" title="Explorer">
+            <!-- Icon for Explorer -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-files">
+                <path d="M20 7V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v3m0 6V9a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" />
+                <path d="M18 22h2a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7Z" />
+            </svg>
         </div>
-      </a>
-      <a>
-			<div class="card">
-				<div class="card-content">
-					<div class="card-image">
-            <img src="img/updates.webp" style="width: 300px" />
-          </div>
-					<div class="card-info-wrapper">
-						<div class="card-info">
-							<div class="card-info-title">
-								<h3>Studentica</h3>
-								<h4>
-									Studentica is a small project that I am
-									making. It's a website that allows students
-									to see their grades and other information.
-									It's still in early development.
-								</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-      </a>
-      <a 
-        href="https://github.com/fidesosu/CodeHighlighter"
-        target="_blank"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="card-image">
-              <img src="img/labels.webp" style="width: 300px" />
-            </div>
-            <div class="card-info-wrapper">
-              <div class="card-info">
-                <div class="card-info-title">
-                  <h3>Code Highlighter</h3>
-                  <h4>
-                    Code Highlighter is an extension that automatically highlights code in page. 
-                    It's still in early development.
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="activity-item" id="search-icon" title="Search">
+            <!-- Icon for Search -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+            </svg>
         </div>
-      </a>
-      <a>
-			<div class="card">
-				<div class="card-content">
-					<div class="card-image"></div>
-					<div class="card-info-wrapper">
-						<div class="card-info">
-							<div class="card-info-title">
-								<h3>Adios</h3>
-								<h4>See you...</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-      </a>
-      <a>
-			<div class="card">
-				<div class="card-content">
-					<div class="card-image"></div>
-					<div class="card-info-wrapper">
-						<div class="card-info">
-							<div class="card-info-title">
-								<h3>I mean hello</h3>
-								<h4>...over here.</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-      </a>
-      <a>
-			<div class="card">
-				<div class="card-content">
-					<div class="card-image"></div>
-					<div class="card-info-wrapper">
-						<div class="card-info">
-							<div class="card-info-title">
-								<h3>Otters</h3>
-								<h4>Look at me, imma cute lil fella.</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<footer>
-		</footer>
-		<script src="js/cardHighlight.js"></script>
-	</body>
+        <div class="activity-item" id="git-icon" title="Source Control">
+            <!-- Icon for Git/Source Control -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-fork">
+                <circle cx="12" cy="18" r="3" />
+                <circle cx="6" cy="6" r="3" />
+                <circle cx="18" cy="6" r="3" />
+                <path d="M18 9v4a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9" />
+                <path d="M12 15v-6" />
+            </svg>
+        </div>
+        <div class="activity-item" id="extensions-icon" title="Extensions">
+            <!-- Icon for Extensions -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-puzzle">
+                <path d="M16 19h4v-4" />
+                <path d="M21 13V9a2 2 0 0 0-2-2h-4l-3-3L9 7H5a2 2 0 0 0-2 2v4l3 3h4l3 3h4a2 2 0 0 0 2-2v-4Z" />
+                <path d="M12 2v4" />
+                <path d="M12 18v4" />
+                <path d="M2 12h4" />
+                <path d="M18 12h4" />
+            </svg>
+        </div>
+        <div class="activity-item mt-auto" id="settings-icon" title="Settings">
+            <!-- Icon for Settings (at the bottom) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2-.44.44 0 0 0-.02 0v.11a2 2 0 0 0-1.84 1.25L2.92 11.02A2 2 0 0 0 3 14c0 1.1.9 2 2 2h-.11a2 2 0 0 0-1.25 1.84l-.07.07a2 2 0 0 0 0 2.83l.7.7a2 2 0 0 0 2.83 0l.07-.07a2 2 0 0 0 1.84-1.25V21a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-2a2 2 0 0 0 2-2 .44.44 0 0 0 .02 0v-.11a2 2 0 0 0 1.84-1.25l.07-.07a2 2 0 0 0 0-2.83l-.7-.7a2 2 0 0 0-2.83 0l-.07.07a2 2 0 0 0-1.25 1.84V3a2 2 0 0 0-2-2Z" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Explorer Sidebar (Hidden by default, slides out) -->
+    <div class="explorer-sidebar" id="explorer-sidebar">
+        <div class="p-4 text-sm font-semibold text-white bg-[#37373d] sticky top-0 z-10 rounded-tr-md">
+            EXPLORER
+        </div>
+        <div class="section-header" id="projects-header">
+            <span>PROJECTS</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
+                <path d="m6 9 6 6 6-6" />
+            </svg>
+        </div>
+        <div class="section-content" id="projects-content">
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder">
+                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9L.64 4.54a2 2 0 0 0 1.66-2.9L2 2h3.93a2 2 0 0 1 1.66.9L7 3h7.93a2 2 0 0 1 1.66-.9L17 2h3.93a2 2 0 0 1 1.66.9L22 3h.07a2 2 0 0 1 1.66.9L24 4h-1.93a2 2 0 0 1-1.66.9L20 6h.07a2 2 0 0 1 1.66.9L22 7h.07a2 2 0 0 1 1.66.9L24 8h-1.93a2 2 0 0 1-1.66.9L20 9h.07a2 2 0 0 1 1.66.9L22 10h.07a2 2 0 0 1 1.66.9L24 11h-1.93a2 2 0 0 1-1.66.9L20 12h.07a2 2 0 0 1 1.66.9L22 13h.07a2 2 0 0 1 1.66.9L24 14h-1.93a2 2 0 0 1-1.66.9L20 15h.07a2 2 0 0 1 1.66.9L22 16h.07a2 2 0 0 1 1.66.9L24 17h-1.93a2 2 0 0 1-1.66.9L20 18h.07a2 2 0 0 1 1.66.9L22 19h.07a2 2 0 0 1 1.66.9L24 20z" />
+                    <rect x="2" y="3" width="20" height="15" rx="2" ry="2" />
+                </svg>
+                My Portfolio
+            </div>
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder">
+                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9L.64 4.54a2 2 0 0 0 1.66-2.9L2 2h3.93a2 2 0 0 1 1.66.9L7 3h7.93a2 2 0 0 1 1.66-.9L17 2h3.93a2 2 0 0 1 1.66.9L22 3h.07a2 2 0 0 1 1.66.9L24 4h-1.93a2 2 0 0 1-1.66.9L20 6h.07a2 2 0 0 1 1.66.9L22 7h.07a2 2 0 0 1 1.66.9L24 8h-1.93a2 2 0 0 1-1.66.9L20 9h.07a2 2 0 0 1 1.66.9L22 10h.07a2 2 0 0 1 1.66.9L24 11h-1.93a2 2 0 0 1-1.66.9L20 12h.07a2 2 0 0 1 1.66.9L22 13h.07a2 2 0 0 1 1.66.9L24 14h-1.93a2 2 0 0 1-1.66.9L20 15h.07a2 2 0 0 1 1.66.9L22 16h.07a2 2 0 0 1 1.66.9L24 17h-1.93a2 2 0 0 1-1.66.9L20 18h.07a2 2 0 0 1 1.66.9L22 19h.07a2 2 0 0 1 1.66.9L24 20z" />
+                    <rect x="2" y="3" width="20" height="15" rx="2" ry="2" />
+                </svg>
+                My Blog
+            </div>
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-code">
+                    <path d="M12 17v4" />
+                    <path d="M8 21h8" />
+                    <path d="M12 2c3.31 0 6 2.69 6 6v7c0 3.31-2.69 6-6 6s-6-2.69-6-6V8c0-3.31 2.69-6 6-6z" />
+                    <path d="m16 8-2 2-2-2" />
+                    <path d="m8 8 2 2 2-2" />
+                </svg>
+                index.html
+            </div>
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                </svg>
+                about.md
+            </div>
+        </div>
+
+        <div class="section-header" id="recent-activity-header">
+            <span>RECENT ACTIVITY</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">
+                <path d="m6 9 6 6 6-6" />
+            </svg>
+        </div>
+        <div class="section-content" id="recent-activity-content">
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-commit">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M12 3v6" />
+                    <path d="M12 15v6" />
+                </svg>
+                Updated README.md
+            </div>
+            <div class="explorer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                Starred a new repo
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="main-content">
+        <div class="p-4 bg-[#252526] rounded-lg shadow-lg mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Welcome to My GitHub.io Page!</h1>
+            <p class="text-gray-400">
+                This page is designed with a familiar VS Code-like interface, blending development aesthetics with personal content.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Project Card 1 -->
+            <div class="bg-[#252526] p-6 rounded-lg shadow-lg border border-[#3c3c3c]">
+                <h2 class="text-xl font-semibold text-white mb-3 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-2 mr-2">
+                        <path d="m18 16 4-4-4-4" />
+                        <path d="m6 8-4 4 4 4" />
+                        <path d="m14.5 4-5 16" />
+                    </svg>
+                    Project One
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    A brief description of Project One. This could be a web application, a script, or any interesting code you've worked on.
+                </p>
+                <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                    View on GitHub
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right ml-1">
+                        <path d="M7 7h10v10" />
+                        <path d="M7 17 17 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="bg-[#252526] p-6 rounded-lg shadow-lg border border-[#3c3c3c]">
+                <h2 class="text-xl font-semibold text-white mb-3 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-text mr-2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h6z" />
+                        <path d="M10 12h4" />
+                        <path d="M10 16h4" />
+                    </svg>
+                    Blog Posts
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    Explore my thoughts on technology, development practices, and other topics.
+                </p>
+                <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                    Read My Blog
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right ml-1">
+                        <path d="M7 7h10v10" />
+                        <path d="M7 17 17 7" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="bg-[#252526] p-6 rounded-lg shadow-lg border border-[#3c3c3c]">
+                <h2 class="text-xl font-semibold text-white mb-3 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap mr-2">
+                        <path d="M21.42 10.982c.113.113.197.243.255.38.056.136.086.276.086.418v1.85c0 .36-.217.69-.556.837l-2.022.808c-.146.056-.29.082-.435.082h-.24a2.035 2.035 0 0 1-1.047-.323l-.936-.554a2.035 2.035 0 0 0-1.047-.323h-.24c-.145 0-.29.026-.435.082l-2.022.808c-.339.147-.556.477-.556.837v1.85c0 .142.029.282.086.418.058.137.142.267.255.38a.747.747 0 0 0 .524.218.747.747 0 0 0 .524-.218L12 17l9.42-6.018c.113-.113.197-.243.255-.38.056-.136.086-.276.086-.418V8.75c0-.142-.029-.282-.086-.418-.058-.137-.142-.267-.255-.38L12 2 2.58 7.618a.747.747 0 0 0-.524.218.747.747 0 0 0-.524-.218c-.113-.113-.197-.243-.255-.38C1.229 7.373 1.2 7.233 1.2 7.09V5.24c0-.142.029-.282.086-.418.058-.137.142-.267.255-.38L12 2l9.42 6.018z" />
+                        <path d="M12 17v4" />
+                        <path d="M10 20h4" />
+                    </svg>
+                    Skills & Experience
+                </h2>
+                <p class="text-gray-400 mb-4">
+                    A summary of my technical skills, professional experience, and educational background.
+                </p>
+                <a href="#" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                    Learn More
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right ml-1">
+                        <path d="M7 7h10v10" />
+                        <path d="M7 17 17 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-[#252526] rounded-lg shadow-lg border border-[#3c3c3c]">
+            <h2 class="text-xl font-semibold text-white mb-3 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github mr-2">
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3.4-.4 7-1.7 7-7.5C22 7.3 20.5 6 19.2 5.5A7.8 7.8 0 0 0 20 4.1L19 3a7.8 7.8 0 0 0-2.8 1.1C15 3.5 13.5 3 12 3c-1.5 0-3 .5-4.2 1.1A7.8 7.8 0 0 0 5 3L4 4.1c0 1.2.6 2.3 1.8 3.4C4.5 7.7 3 9 3 13.1c0 5.8 3.6 7.1 7 7.5A4.8 4.8 0 0 0 10 22h5zm-3-19c-3.3 0-6 2.7-6 6v7c0 3.3 2.7 6 6 6s6-2.7 6-6V8c0-3.3-2.7-6-6-6z" />
+                </svg>
+                My GitHub Profile
+            </h2>
+            <p class="text-gray-400 mb-4">
+                Check out more of my open-source projects and contributions on GitHub.
+            </p>
+            <a href="https://github.com/your-username" target="_blank" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors">
+                Visit Profile
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link ml-1">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <path d="M15 3h6v6" />
+                    <path d="M10 14 21 3" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const explorerIcon = document.getElementById('explorer-icon');
+            const explorerSidebar = document.getElementById('explorer-sidebar');
+            const mainContent = document.getElementById('main-content');
+            const activityItems = document.querySelectorAll('.activity-item');
+
+            // Handle explorer sidebar toggle
+            explorerIcon.addEventListener('click', () => {
+                explorerSidebar.classList.toggle('open');
+                mainContent.classList.toggle('sidebar-open');
+
+                // On mobile, if explorer opens, ensure main content is pushed away or hidden
+                if (window.innerWidth <= 600) {
+                    if (explorerSidebar.classList.contains('open')) {
+                        mainContent.style.display = 'none';
+                    } else {
+                        mainContent.style.display = 'block';
+                    }
+                }
+            });
+
+            // Set initial state based on screen size for explorer sidebar
+            function initializeSidebarState() {
+                if (window.innerWidth > 600) {
+                    explorerSidebar.classList.add('open');
+                    mainContent.classList.add('sidebar-open');
+                } else {
+                    explorerSidebar.classList.remove('open');
+                    mainContent.classList.remove('sidebar-open');
+                    mainContent.style.display = 'block'; // Ensure main content is visible by default on mobile
+                }
+            }
+
+            // Collapse/expand sections in explorer sidebar
+            const sectionHeaders = document.querySelectorAll('.section-header');
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    header.classList.toggle('collapsed');
+                    const content = header.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+                // Initialize all sections as expanded for desktop view, collapsed for mobile
+                const content = header.nextElementSibling;
+                if (window.innerWidth <= 768) {
+                    header.classList.add('collapsed');
+                    content.style.maxHeight = '0';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+
+            // Handle active state for activity bar icons (optional: could load different content)
+            activityItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    activityItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // If explorer icon is clicked, ensure the sidebar opens
+                    if (item.id === 'explorer-icon') {
+                         explorerSidebar.classList.add('open');
+                         mainContent.classList.add('sidebar-open');
+                         if (window.innerWidth <= 600) {
+                            mainContent.style.display = 'none';
+                         }
+                    } else {
+                        // For other icons, close the explorer sidebar and reset main content margin
+                        explorerSidebar.classList.remove('open');
+                        mainContent.classList.remove('sidebar-open');
+                        mainContent.style.display = 'block'; // Ensure main content is visible
+                        mainContent.style.marginLeft = '50px'; // Reset margin
+                    }
+                });
+            });
+
+            // Adjust layout on window resize
+            window.addEventListener('resize', () => {
+                initializeSidebarState();
+                // Re-calculate max-height for expanded sections on resize
+                sectionHeaders.forEach(header => {
+                    const content = header.nextElementSibling;
+                    if (!header.classList.contains('collapsed')) {
+                        content.style.maxHeight = 'none'; // Temporarily unset to get scrollHeight
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+                 // On mobile, if explorer is open, keep main content hidden
+                if (window.innerWidth <= 600 && explorerSidebar.classList.contains('open')) {
+                    mainContent.style.display = 'none';
+                } else {
+                    mainContent.style.display = 'block';
+                }
+            });
+
+            // Initial call to set state
+            initializeSidebarState();
+        });
+    </script>
+</body>
 </html>
